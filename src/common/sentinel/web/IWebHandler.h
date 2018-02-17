@@ -3,6 +3,7 @@
 
 #include "IWebServer.h"
 #include "Method.h"
+#include <string>
 #include <memory>
 
 namespace sentinel {

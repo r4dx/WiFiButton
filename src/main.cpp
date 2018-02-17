@@ -11,62 +11,62 @@
 #include "common/sentinel/ota/ota.h"
 #include "common/sentinel/logger/ConsoleFileLoggerWrapper.h"
 #include "common/sentinel/time/TimeString.h"
+#include "handler/HealthcheckHandler.h"
+
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+#include <WiFiUdp.h>
 
 sentinel::ota::OverTheAirUploadReceiver* otaReceiver = nullptr;
-sentinel::log::ConsoleFileLoggerWrapper* loggerWrapper;
+sentinel::log::Logger* logger;
 sentinel::web::IWebServer* web;
 
 void initLogger() {
-    loggerWrapper = new sentinel::log::ConsoleFileLoggerWrapper(
-            std::shared_ptr<std::string>(
-                new std::string(
-                    sentinel::log::ConsoleFileLoggerWrapper::DefaultLoggerFileName)),
-            *(new sentinel::time::MillisTimeProvider()));
+	Serial.begin(112500);
+    logger = new sentinel::log::Logger(Serial, *(new sentinel::time::MillisTimeProvider()));
     
-    loggerWrapper->get().setLevel(sentinel::log::DEBUG);
+    logger->setLevel(sentinel::log::DEBUG);
+}
+
+void initWiFi() {
+	logger->info("Booting");
+	WiFi.mode(WIFI_STA);
+	WiFi.begin(wifi_button::configuration::wifi::SSID, 
+		wifi_button::configuration::wifi::PASSWORD);
+
+	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+		logger->info(" Connection Failed! Rebooting...");
+		delay(5000);
+		ESP.restart();
+	}
+
 }
 
 void initWebServer() {
-    sentinel::log::Logger& logger = loggerWrapper->get();
-    logger.info("Loading handlers");
-    
-/*
-    // Will never be deleted!
-    auto getLogHandler = new sentinel::handler::log::GetLogHandler(logger);
-    auto removeLogHandler = new sentinel::handler::log::RemoveLogHandler(*loggerWrapper);
-    auto browseSDHandler = new sentinel::handler::sd::BrowseSDHandler(logger);
-    auto ioExpanderHandler = new sentinel::handler::io_expander::IOExpanderHandler(logger);
-	auto pictureHandler = new sentinel::handler::camera::PictureHandler(logger);
-*/
-    ESP8266WebServer* server = new ESP8266WebServer(80);
-    web = new sentinel::web::ESPWebServer(*server, logger);
+    logger->info("Loading handlers");
+	// Will never be deleted!    
+	auto healthcheckHandler = new wifi_button::handler::HealthcheckHandler(*logger);
 
-/*
-    web->on(*getLogHandler);
-    web->on(*removeLogHandler);
-    web->on(*browseSDHandler);
-    web->on(*ioExpanderHandler);
-	web->on(*pictureHandler);
-*/
-    logger.info("Starting web server");
+    ESP8266WebServer* server = new ESP8266WebServer(80);
+    web = new sentinel::web::ESPWebServer(*server, *logger);
+	web->on(*healthcheckHandler);
+
+    logger->info("Starting web server");
     web->start();    
-    logger.info("Started successfully");
+    logger->info("Started successfully");
 }
 
 void setup() {
     initLogger();
+	initWiFi();
     initWebServer();
 }
 
-void loop() {
-    auto logger = loggerWrapper->get();
-    
+void loop() {    
     if (otaReceiver == nullptr) {
-        logger.info("Initializing Over-the-air update receiver");
-            otaReceiver = new sentinel::ota::OverTheAirUploadReceiver(logger, 
-                    wifi_button::configuration::wifi::SSID, 
-					wifi_button::configuration::wifi::PASSWORD);
-            logger.info("Initialized");
+        logger->info("Initializing Over-the-air update receiver");
+            otaReceiver = new sentinel::ota::OverTheAirUploadReceiver(*logger);
+            logger->info("Initialized");
             return;
     }
 

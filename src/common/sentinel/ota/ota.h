@@ -11,8 +11,7 @@ namespace sentinel {
     namespace ota {
         class OverTheAirUploadReceiver {
         public:
-            OverTheAirUploadReceiver(log::Logger& logger, const std::string& ssid, 
-                    const std::string& password);
+            OverTheAirUploadReceiver(log::Logger& logger);
             bool process();
 
         private:

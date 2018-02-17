@@ -2,6 +2,7 @@
 #define IWEBSERVER_H
 
 #include "IWebHandler.h"
+#include <string>
 
 namespace sentinel {
     namespace web {

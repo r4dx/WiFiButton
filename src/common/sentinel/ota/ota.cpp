@@ -2,25 +2,13 @@
 #include "ota.h"
 
 #ifdef OTA_ENABLED
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #endif
 
 namespace sentinel {
     namespace ota {
-        OverTheAirUploadReceiver::OverTheAirUploadReceiver(log::Logger& logger, 
-                const std::string& ssid, const std::string& password) {
+        OverTheAirUploadReceiver::OverTheAirUploadReceiver(log::Logger& logger) {
           #ifdef OTA_ENABLED
-          logger.info("Booting");
-          WiFi.mode(WIFI_STA);
-          WiFi.begin(ssid.c_str(), password.c_str());
-          while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-            logger.info(" Connection Failed! Rebooting...");
-            delay(5000);
-            ESP.restart();
-          }
           // Port defaults to 8266
           // ArduinoOTA.setPort(8266);
 
