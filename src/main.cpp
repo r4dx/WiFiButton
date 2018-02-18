@@ -3,7 +3,6 @@
 
 #include <string>
 #include <memory>
-#include <WiFiClient.h>
 #include <Arduino.h>
 #include "common/sentinel/web/ESPWebServer.h"
 #include "conf/configuration.h"
@@ -11,11 +10,9 @@
 #include "common/sentinel/ota/ota.h"
 #include "common/sentinel/logger/ConsoleFileLoggerWrapper.h"
 #include "common/sentinel/time/TimeString.h"
+#include "common/sentinel/wifi/WiFiConnector.h"
 #include "handler/HealthcheckHandler.h"
 
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 
 sentinel::ota::OverTheAirUploadReceiver* otaReceiver = nullptr;
 sentinel::log::Logger* logger;
@@ -24,21 +21,20 @@ sentinel::web::IWebServer* web;
 void initLogger() {
 	Serial.begin(112500);
     logger = new sentinel::log::Logger(Serial, *(new sentinel::time::MillisTimeProvider()));
-    
     logger->setLevel(sentinel::log::DEBUG);
 }
 
 void initWiFi() {
-	logger->info("Booting");
-	WiFi.mode(WIFI_STA);
-	WiFi.begin(wifi_button::configuration::wifi::SSID, 
-		wifi_button::configuration::wifi::PASSWORD);
+	logger->info("Connecting to WiFi");
+	sentinel::wifi::WiFiConnector connector(wifi_button::configuration::wifi::SSID, 
+		wifi_button::configuration::wifi::PASSWORD, 5, 1000);
 
-	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-		logger->info(" Connection Failed! Rebooting...");
-		delay(5000);
+	if (!connector.connect()) {
+		logger->error("Can't connect to WiFi, restarting!");
 		ESP.restart();
 	}
+
+	logger->info("Connected, IP is " + connector.getIp());
 
 }
 
@@ -65,9 +61,10 @@ void setup() {
 void loop() {    
     if (otaReceiver == nullptr) {
         logger->info("Initializing Over-the-air update receiver");
-            otaReceiver = new sentinel::ota::OverTheAirUploadReceiver(*logger);
-            logger->info("Initialized");
-            return;
+		otaReceiver = new sentinel::ota::OverTheAirUploadReceiver(*logger);
+		otaReceiver->begin();
+		logger->info("Initialized");
+		return;
     }
 
     if (otaReceiver->process())

@@ -12,9 +12,11 @@ namespace sentinel {
         class OverTheAirUploadReceiver {
         public:
             OverTheAirUploadReceiver(log::Logger& logger);
+			void begin();
             bool process();
 
         private:
+			log::Logger& logger;
             bool started = false;
         };
     }
