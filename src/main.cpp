@@ -10,7 +10,7 @@
 #include "common/sentinel/ota/ota.h"
 #include "common/sentinel/logger/ConsoleFileLoggerWrapper.h"
 #include "common/sentinel/time/TimeString.h"
-#include "common/sentinel/wifi/WiFiConnector.h"
+#include "common/sentinel/wifi/WiFiConnection.h"
 #include "handler/HealthcheckHandler.h"
 
 
@@ -26,15 +26,15 @@ void initLogger() {
 
 void initWiFi() {
 	logger->info("Connecting to WiFi");
-	sentinel::wifi::WiFiConnector connector(wifi_button::configuration::wifi::SSID, 
+	sentinel::wifi::WiFiConnection connection(wifi_button::configuration::wifi::SSID, 
 		wifi_button::configuration::wifi::PASSWORD, 5, 1000);
 
-	if (!connector.connect()) {
+	if (!connection.connect()) {
 		logger->error("Can't connect to WiFi, restarting!");
 		ESP.restart();
 	}
 
-	logger->info("Connected, IP is " + connector.getIp());
+	logger->info("Connected, IP is " + connection.getIp());
 
 }
 

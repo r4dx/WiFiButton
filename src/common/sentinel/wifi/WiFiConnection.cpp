@@ -1,13 +1,13 @@
-#include "WiFiConnector.h"
+#include "WiFiConnection.h"
 #include <ESP8266WiFi.h>
 
 namespace sentinel {
 	namespace wifi {
-		WiFiConnector::WiFiConnector(const std::string & SSID, const std::string & password, 
+		WiFiConnection::WiFiConnection(const std::string & SSID, const std::string & password, 
 			int attempts, int delayBetweenAttempts = 5000)
 			: SSID(SSID), password(password), attempts(attempts), delayBetweenAttempts(delayBetweenAttempts) { }
 
-		bool WiFiConnector::connect() {
+		bool WiFiConnection::connect() {
 			WiFi.mode(WIFI_STA);
 			WiFi.begin(SSID.c_str(), password.c_str());
 			int current_attempts = attempts;
@@ -17,10 +17,10 @@ namespace sentinel {
 			return true;
 		}
 
-		bool WiFiConnector::disconnect() {
+		bool WiFiConnection::disconnect() {
 			WiFi.disconnect();
 		}
-		std::string WiFiConnector::getIp() const {
+		std::string WiFiConnection::getIp() const {
 			return std::string(WiFi.localIP().toString().c_str());
 		}
 	}
