@@ -26,16 +26,17 @@ void initLogger() {
 
 void initWiFi() {
 	logger->info("Connecting to WiFi");
-	sentinel::wifi::WiFiConnection connection(wifi_button::configuration::wifi::SSID, 
+
+	// N.B. Never destroyed and thus never disconnects!!
+	auto connection = new sentinel::wifi::WiFiConnection(wifi_button::configuration::wifi::SSID,
 		wifi_button::configuration::wifi::PASSWORD, 5, 1000);
 
-	if (!connection.connect()) {
+	if (!connection->connect()) {
 		logger->error("Can't connect to WiFi, restarting!");
 		ESP.restart();
 	}
 
-	logger->info("Connected, IP is " + connection.getIp());
-
+	logger->info("Connected, IP is " + connection->getIp());
 }
 
 void initWebServer() {
