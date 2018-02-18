@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #include "ESPWebServer.h"
 #include <memory>
 
@@ -87,5 +86,3 @@ namespace sentinel {
         
     }
 }
-
-#endif

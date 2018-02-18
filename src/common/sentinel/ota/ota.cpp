@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #include "ota.h"
 
 #ifdef OTA_ENABLED
@@ -57,4 +56,3 @@ namespace sentinel {
         }
     }
 }
-#endif

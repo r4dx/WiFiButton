@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #include "TimeString.h"
 #include "Arduino.h"
 
@@ -16,4 +15,3 @@ namespace sentinel {
         }
     }
 }
-#endif

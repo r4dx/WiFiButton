@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #ifndef OTA_H
 #define OTA_H
 
@@ -21,5 +20,4 @@ namespace sentinel {
         };
     }
 }
-#endif
 #endif

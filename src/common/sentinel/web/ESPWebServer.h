@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #ifndef ESPWEBSERVER_H
 #define ESPWEBSERVER_H
 
@@ -54,5 +53,4 @@ namespace sentinel {
         };
     }
 }
-#endif
 #endif

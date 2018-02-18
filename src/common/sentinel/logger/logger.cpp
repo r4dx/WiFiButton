@@ -1,4 +1,3 @@
-#ifndef UNIT_TEST
 #include "logger.h"
 #include "Arduino.h"
 #include "ConsoleFileLoggerWrapper.h"
@@ -70,4 +69,3 @@ namespace sentinel {
         }
     }
 }
-#endif
