@@ -10,7 +10,9 @@
 #include "common/sentinel/ota/ota.h"
 #include "common/sentinel/logger/ConsoleFileLoggerWrapper.h"
 #include "common/sentinel/time/TimeString.h"
-#include "common/sentinel/wifi/WiFiConnection.h"
+#include "common/sentinel/wifi/Connection.h"
+#include "common/sentinel/wifi/AccessPoint.h"
+#include "common/sentinel/wifi/IProvider.h"
 #include "handler/HealthcheckHandler.h"
 
 
@@ -28,14 +30,20 @@ void initWiFi() {
 	logger->info("Connecting to WiFi");
 
 	// N.B. Never destroyed and thus never disconnects!!
-	auto connection = new sentinel::wifi::WiFiConnection(wifi_button::configuration::wifi::SSID,
-		wifi_button::configuration::wifi::PASSWORD, 5, 1000);
+	sentinel::wifi::IProvider* connection;
+	//int random_number = random(0, 2);
+	//logger->debug("%i - %s", random_number, random_number == 1 ? "Connecting to WIFI" : "Starting access point");
+	//if (random_number == 1)
+		connection = new sentinel::wifi::Connection(wifi_button::configuration::wifi::SSID,
+			wifi_button::configuration::wifi::PASSWORD, 15, 1000);
+	//else
+	//	connection = new sentinel::wifi::AccessPoint("WiFiButton");
 
 	if (!connection->connect()) {
 		logger->error("Can't connect to WiFi, restarting!");
 		ESP.restart();
 	}
-
+	// if AP it's 192.168.4.1
 	logger->info("Connected, IP is " + connection->getIp());
 }
 

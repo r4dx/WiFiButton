@@ -1,9 +1,9 @@
-#include "WiFiConnection.h"
+#include "Connection.h"
 #include <ESP8266WiFi.h>
 
 namespace sentinel {
 	namespace wifi {
-		WiFiConnection::WiFiConnection(const std::string & SSID, const std::string & password, 
+		Connection::Connection(const std::string & SSID, const std::string & password, 
 			int attempts, int delayBetweenAttempts = 5000)
 			: SSID(SSID), 
 			password(password), 
@@ -11,11 +11,11 @@ namespace sentinel {
 			delayBetweenAttempts(delayBetweenAttempts),
 			connected(false) { }
 
-		WiFiConnection::~WiFiConnection() {
+		Connection::~Connection() {
 			disconnect();
 		}
 
-		bool WiFiConnection::connect() {
+		bool Connection::connect() {
 			WiFi.mode(WIFI_STA);
 			WiFi.begin(SSID.c_str(), password.c_str());
 			int current_attempts = attempts;
@@ -26,11 +26,12 @@ namespace sentinel {
 			return connected;
 		}
 
-		bool WiFiConnection::disconnect() {
+		bool Connection::disconnect() {
 			if (connected)
-				WiFi.disconnect();
+				return WiFi.disconnect();
+			return false;
 		}
-		std::string WiFiConnection::getIp() const {
+		std::string Connection::getIp() const {
 			return std::string(WiFi.localIP().toString().c_str());
 		}
 	}
