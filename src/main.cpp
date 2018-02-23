@@ -13,8 +13,8 @@
 #include "common/sentinel/wifi/Connection.h"
 #include "common/sentinel/wifi/AccessPoint.h"
 #include "common/sentinel/wifi/IProvider.h"
-#include "handler/HealthcheckHandler.h"
-
+#include "handler/healthcheck/HealthcheckHandler.h"
+#include "handler/setup/SetupHandler.h"
 
 sentinel::ota::OverTheAirUploadReceiver* otaReceiver = nullptr;
 sentinel::log::Logger* logger;
@@ -51,10 +51,12 @@ void initWebServer() {
     logger->info("Loading handlers");
 	// Will never be deleted!    
 	auto healthcheckHandler = new wifi_button::handler::HealthcheckHandler(*logger);
+	auto setupHandler = new wifi_button::handler::SetupHandler(*logger);
 
     ESP8266WebServer* server = new ESP8266WebServer(80);
     web = new sentinel::web::ESPWebServer(*server, *logger);
 	web->on(*healthcheckHandler);
+	web->on(*setupHandler);
 
     logger->info("Starting web server");
     web->start();    
