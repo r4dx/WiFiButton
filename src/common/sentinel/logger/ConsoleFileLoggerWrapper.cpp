@@ -1,7 +1,7 @@
 #include "ConsoleFileLoggerWrapper.h"
 #include <SPI.h>
 #include "../stream/DualStreamValve.h"
-#include "../sd/File.h"
+#include "../storage/sd/File.h"
 
 namespace sentinel {
     namespace log {
@@ -36,7 +36,7 @@ namespace sentinel {
         
         bool ConsoleFileLoggerWrapper::openFile() {
             file = SD.open(fileName->c_str(), FILE_WRITE);
-            return sd::file::valid(file);
+            return storage::sd::file::valid(file);
         }
         
         ConsoleFileLoggerWrapper::~ConsoleFileLoggerWrapper() {
@@ -45,7 +45,7 @@ namespace sentinel {
             if (dualStream != nullptr)
                 delete dualStream;
             
-            if (sd::file::valid(file))
+            if (storage::sd::file::valid(file))
                 file.close();
         }
         
