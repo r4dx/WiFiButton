@@ -3,7 +3,6 @@
 .vs
 Debug
 nbproject
-src/conf/configuration.h
 *.log
 *.sln
 *.vcxproj
