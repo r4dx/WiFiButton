@@ -2,6 +2,8 @@
 #include "common/sentinel/web/IWebHandler.h"
 #include "common/sentinel/web/Method.h"
 #include "common/sentinel/logger/logger.h"
+#include "conf/Configuration.h"
+#include "common/sentinel/storage/eeprom/EEPROM.h"
 #include <string>
 #include <memory>
 
@@ -16,11 +18,13 @@ namespace wifi_button {
 			void setSender(sentinel::web::IWebSender& sender) override;
 			bool handle() override;
 
-			SetupHandler(sentinel::log::Logger& logger);
+			SetupHandler(sentinel::log::Logger& logger, 
+				std::shared_ptr<wifi_button::configuration::Configuration> configuration);
 		private:
 			bool handleGet();
 			bool handlePost();
 			std::shared_ptr<std::string> uri;
+			std::shared_ptr<wifi_button::configuration::Configuration> configuration;
 			sentinel::web::Method method;
 
 			sentinel::web::IWebSender* sender;
