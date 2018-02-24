@@ -5,10 +5,12 @@
 
 namespace sentinel {
     namespace web {
-        enum Method {
+        enum Method : byte {
             GET,
             POST,
-            DELETE
+            DELETE,
+			PUT,
+			HEAD
         };
         
         HTTPMethod methodToHTTPMethod(Method method);

@@ -11,6 +11,8 @@ namespace sentinel {
                     return HTTPMethod::HTTP_POST;
                 case Method::DELETE:
                     return HTTPMethod::HTTP_DELETE;
+				case Method::PUT:
+					return HTTPMethod::HTTP_PUT;
                 default:
                     assert(0 && "Undefined Method");
             }
