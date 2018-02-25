@@ -13,6 +13,7 @@
 #include "common/sentinel/wifi/AccessPoint.h"
 #include "common/sentinel/wifi/IProvider.h"
 #include "common/sentinel/storage/eeprom/EEPROM.h"
+#include "common/sentinel/peripheral/Button.h"
 #include "handler/healthcheck/HealthcheckHandler.h"
 #include "handler/setup/SetupHandler.h"
 #include "handler/test/TestHandler.h"
@@ -22,6 +23,12 @@ sentinel::ota::OverTheAirUploadReceiver* otaReceiver = nullptr;
 sentinel::log::Logger* logger;
 sentinel::web::IWebServer* web;
 std::shared_ptr<wifi_button::configuration::Configuration> configuration;
+sentinel::peripheral::Button* button;
+
+void onButtonDown() {
+	logger->info("Button is pressed");
+	delay(1000);
+}
 
 void initLogger() {
 	Serial.begin(112500);
@@ -82,6 +89,7 @@ void setup() {
     initLogger();
 	initWiFi();
     initWebServer();
+	button = new sentinel::peripheral::Button(D0, onButtonDown);
 }
 
 void loop() {    
@@ -97,8 +105,7 @@ void loop() {
         return;
 
     web->process();
-
-    //logger->info("Ping");
-    delay(100);
+	button->process();
+    delay(10);
 }
 #endif
