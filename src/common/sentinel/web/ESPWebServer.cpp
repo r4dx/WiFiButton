@@ -38,6 +38,7 @@ namespace sentinel {
             if (this->started)
                 return false;
             handler.setSender(*this);
+			handler.setArgProvider(*this);
             server.addHandler(wrap(handler));
 
             return true;
@@ -59,6 +60,10 @@ namespace sentinel {
         void ESPWebServer::sendContent(const std::string& content) {
             server.sendContent(content.c_str());
         }
+
+		std::string ESPWebServer::arg(const std::string& name) const {
+			return std::string(server.arg(name.c_str()).c_str());
+		}
         
         ESPWebServer::RequestHandlerWrapper::RequestHandlerWrapper(
             IWebHandler& handler, log::Logger& logger) : 
@@ -81,6 +86,7 @@ namespace sentinel {
             logger.info("Processing " + std::string(requestUri.c_str()));
             handler.setPath(httpMethodToMethod(requestMethod), 
                     std::shared_ptr<std::string>(new std::string(requestUri.c_str())));
+			
             return handler.handle();            
         }
         

@@ -14,6 +14,7 @@ namespace wifi_button {
                 std::shared_ptr<std::string> uri) override;
                 
             void setSender(sentinel::web::IWebSender& sender) override;
+			void setArgProvider(const sentinel::web::IWebArgProvider& argProvider) override;
             bool handle() override;
 
 			TestHandler(sentinel::log::Logger& logger);
@@ -23,7 +24,9 @@ namespace wifi_button {
                 
 			sentinel::web::IWebSender* sender;
             sentinel::log::Logger& logger;
-        };
+
+
+		};
     }
 }
 

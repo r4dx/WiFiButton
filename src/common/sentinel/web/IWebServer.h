@@ -1,6 +1,4 @@
-#ifndef IWEBSERVER_H
-#define IWEBSERVER_H
-
+#pragma once
 #include "IWebHandler.h"
 #include <string>
 
@@ -29,6 +27,11 @@ namespace sentinel {
             virtual void sendContent(const std::string& content) = 0;
             
         };
+
+		class IWebArgProvider {
+		public:
+			virtual ~IWebArgProvider() { };
+			virtual std::string arg(const std::string& name) const = 0;
+		};
     }
 }
-#endif

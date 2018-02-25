@@ -16,20 +16,21 @@ namespace wifi_button {
 				std::shared_ptr<std::string> uri) override;
 
 			void setSender(sentinel::web::IWebSender& sender) override;
+			void setArgProvider(const sentinel::web::IWebArgProvider& argProvider) override;
 			bool handle() override;
 
 			SetupHandler(sentinel::log::Logger& logger, 
 				std::shared_ptr<wifi_button::configuration::Configuration> configuration);
 		private:
-			bool handleGet();
+			void render();
 			bool handlePost();
 			std::shared_ptr<std::string> uri;
 			std::shared_ptr<wifi_button::configuration::Configuration> configuration;
 			sentinel::web::Method method;
 
 			sentinel::web::IWebSender* sender;
+			const sentinel::web::IWebArgProvider* argProvider;
 			sentinel::log::Logger& logger;
-
 			static const std::string body_pattern;
 		};
 	}

@@ -11,6 +11,10 @@ namespace wifi_button {
             return uri->compare("/healthcheck") == 0 && method == sentinel::web::Method::GET;
         }
 
+		void HealthcheckHandler::setArgProvider(const sentinel::web::IWebArgProvider& argProvider) {
+			// arg provider is not required
+		}
+
 		HealthcheckHandler::HealthcheckHandler(sentinel::log::Logger& logger) :
                 logger(logger), 
                 sender(nullptr),

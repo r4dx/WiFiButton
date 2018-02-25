@@ -14,7 +14,7 @@ namespace sentinel {
         // N.B. calling handler canHandle() + handle() are not thread safe 
         // in this implementation (there are no threads in ESP8266)
         
-        class ESPWebServer : public IWebServer, IWebSender {
+        class ESPWebServer : public IWebServer, IWebSender, IWebArgProvider {
         public:
             ESPWebServer(ESP8266WebServer& server, log::Logger& logger);
 
@@ -27,12 +27,12 @@ namespace sentinel {
                 const std::string& content) override;
             
             void sendContent(const std::string& content) override;
-            
+			std::string arg(const std::string& name) const override;
+
         private:                     
             ESP8266WebServer& server;
             bool started = false;
             log::Logger& logger;
-            
             
             class RequestHandlerWrapper : public RequestHandler {
             public:
@@ -42,7 +42,7 @@ namespace sentinel {
                 bool canUpload(String uri) override;
                 bool handle(ESP8266WebServer& server, HTTPMethod requestMethod, 
                     String requestUri) override;
-                
+
             private:
                 IWebHandler& handler;
                 log::Logger& logger;
@@ -50,7 +50,7 @@ namespace sentinel {
 
             collections::ptr_list<RequestHandlerWrapper> wrapperList;
             RequestHandlerWrapper* wrap(IWebHandler& handler);
-        };
+		};
     }
 }
 #endif

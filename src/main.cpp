@@ -30,21 +30,32 @@ void initLogger() {
 }
 
 void initWiFi() {
+	const std::string AP_NAME = "WiFiButton";
 	logger->info("Connecting to WiFi");
 	// N.B. Never destroyed and thus never disconnects!!
 	sentinel::wifi::IProvider* connection;
+
 	// N.B. Never destroyed
 	sentinel::storage::EEPROM* eeprom = new sentinel::storage::EEPROM(SDA, SCL, 0x50);
 	configuration = wifi_button::configuration::Configuration::load(*eeprom);
-	if (configuration == nullptr)
-		connection = new sentinel::wifi::AccessPoint("WiFiButton");
+	eeprom->move(0);
+	if (configuration == nullptr) {
+		configuration = std::make_shared<wifi_button::configuration::Configuration>(*eeprom);
+		connection = new sentinel::wifi::AccessPoint(AP_NAME);
+	}
 	else
-		connection = new sentinel::wifi::Connection(configuration->ssid, configuration->password, 15, 1000);
+		connection = new sentinel::wifi::Connection(configuration->ssid, configuration->password, 5, 1000);
 
 	if (!connection->connect()) {
-		logger->error("Can't connect to WiFi, restarting!");
-		ESP.restart();
+		logger->error("Can't connect to WiFi, setting up access point!");
+		delete connection;
+		connection = new sentinel::wifi::AccessPoint(AP_NAME);
+		if (!connection->connect()) {
+			logger->error("Can't create Access Point, restarting");
+			ESP.restart();
+		}
 	}
+
 	// if AP it's 192.168.4.1
 	logger->info("Connected, IP is " + connection->getIp());
 }

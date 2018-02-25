@@ -1,6 +1,4 @@
-#ifndef GETLOGHANDLER_H
-#define GETLOGHANDLER_H
-
+#pragma once
 #include "common/sentinel/web/IWebHandler.h"
 #include "common/sentinel/logger/logger.h"
 #include <string>
@@ -16,7 +14,7 @@ namespace wifi_button {
                 
             void setSender(sentinel::web::IWebSender& sender) override;
             bool handle() override;
-
+			void setArgProvider(const sentinel::web::IWebArgProvider& argProvider) override;
             HealthcheckHandler(sentinel::log::Logger& logger);
         private:
             std::shared_ptr<std::string> uri;
@@ -27,5 +25,3 @@ namespace wifi_button {
         };
     }
 }
-#endif /* GETLOGHANDLER_H */
-

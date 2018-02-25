@@ -18,6 +18,10 @@ namespace wifi_button {
                 uri(std::shared_ptr<std::string>()),
                 method(sentinel::web::Method::DELETE) { }
 
+		void TestHandler::setArgProvider(const sentinel::web::IWebArgProvider& argProvider) {
+			// not required here
+		}
+
         void TestHandler::setSender(sentinel::web::IWebSender& sender) {
             this->sender = &sender;
         }

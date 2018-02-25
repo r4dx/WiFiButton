@@ -4,6 +4,8 @@
 namespace sentinel {
 	namespace wifi {
 		bool AccessPoint::connect() {
+			if (WiFi.isConnected())
+				WiFi.disconnect();
 			WiFi.mode(WIFI_AP_STA);
 			connected = WiFi.softAP(SSID.c_str());
 			return connected;

@@ -16,11 +16,14 @@ namespace sentinel {
 		}
 
 		bool Connection::connect() {
+			if (WiFi.isConnected())
+				WiFi.disconnect();
 			WiFi.mode(WIFI_STA);
 			WiFi.begin(SSID.c_str(), password.c_str());
 			int current_attempts = attempts;
-			while (WiFi.waitForConnectResult() != WL_CONNECTED && current_attempts-- > 0)
+			while (WiFi.waitForConnectResult() != WL_CONNECTED && current_attempts-- > 0) {
 				delay(delayBetweenAttempts);
+			}				
 			connected = WiFi.waitForConnectResult() == WL_CONNECTED;
 
 			return connected;

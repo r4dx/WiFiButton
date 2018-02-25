@@ -12,21 +12,21 @@
 				<td colspan='2'><h2>WiFi setup</h2></td>
 			</tr>
 			<tr>
-				<td>SSID</td><td><input type='text' id='ssid' value='%SSID%' /></td>
+				<td>SSID</td><td><input type='text' name='ssid' value='%SSID%' /></td>
 			</tr>
 			<tr>
-				<td>Password</td><td><input type='password' id='password' value='%PASSWORD%' /></td>
+				<td>Password</td><td><input type='password' name='password' value='%PASSWORD%' /></td>
 			</tr>
 			<tr>
 				<td colspan='2'><h2>Button</h2></td>
 			</tr>
 			<tr>
-				<td>URL</td><td><input type='text' id='url' value='%URL%' /></td>
+				<td>URL</td><td><input type='text' name='url' value='%URL%' /></td>
 			</tr>
 			<tr>
 				<td>Method</td>
 				<td>
-					<select id='method'>
+					<select name='method'>
 						<option value='get' %GET_SELECTED%>GET</option>
 						<option value='post' %POST_SELECTED%>POST</option>
 						<option value='delete' %DELETE_SELECTED%>DELETE</option>
@@ -35,10 +35,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Headers</td><td><textarea id='headers' cols='50' rows='10'>%HEADERS%</textarea></td>
+				<td>Headers</td><td><textarea name='headers' cols='50' rows='10'>%HEADERS%</textarea></td>
 			</tr>
 			<tr>
-				<td>Body</td><td><textarea id='body' cols='50' rows='10'>%BODY%</textarea></td>
+				<td>Body</td><td><textarea name='body' cols='50' rows='10'>%BODY%</textarea></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td><td align='right'>N.B. Save will restart device</td>
