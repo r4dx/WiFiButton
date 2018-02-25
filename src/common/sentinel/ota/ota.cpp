@@ -32,7 +32,7 @@ namespace sentinel {
 
 			ArduinoOTA.onProgress([this](unsigned int progress,
 				unsigned int total) {
-				this->logger.info("Progress: %u%%\r", progress);
+				this->logger.info("Progress: %u%%\r", progress * 100 / total);
 			});
 
 			ArduinoOTA.onError([this](ota_error_t error) {
