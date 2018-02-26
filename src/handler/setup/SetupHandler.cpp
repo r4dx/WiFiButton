@@ -1,4 +1,5 @@
 #include "SetupHandler.h"
+#include <common/sentinel/string/Utils.h>
 
 namespace wifi_button {
 	namespace handler {
@@ -31,26 +32,18 @@ namespace wifi_button {
 				logger(logger), 
 				configuration(configuration) { }
 
-		bool replace(std::string& str, const std::string& from, const std::string& to) {
-			size_t start_pos = str.find(from);
-			if (start_pos == std::string::npos)
-				return false;
-			str.replace(start_pos, from.length(), to);
-			return true;
-		}
-
 
 		void SetupHandler::render() {
 			std::string content(body_pattern);
-			replace(content, "%SSID%", configuration->ssid);
-			replace(content, "%PASSWORD%", configuration->password);
-			replace(content, "%URL%", configuration->url);
-			replace(content, "%GET_SELECTED%", configuration->method == sentinel::web::Method::GET ? "selected" : "");
-			replace(content, "%POST_SELECTED%", configuration->method == sentinel::web::Method::POST ? "selected" : "");
-			replace(content, "%DELETE_SELECTED%", configuration->method == sentinel::web::Method::DELETE ? "selected" : "");
-			replace(content, "%PUT_SELECTED%", configuration->method == sentinel::web::Method::PUT ? "selected" : "");
-			replace(content, "%HEADERS%", configuration->headers);
-			replace(content, "%BODY%", configuration->body);
+			sentinel::string::replace(content, "%SSID%", configuration->ssid);
+			sentinel::string::replace(content, "%PASSWORD%", configuration->password);
+			sentinel::string::replace(content, "%URL%", configuration->url);
+			sentinel::string::replace(content, "%GET_SELECTED%", configuration->method == sentinel::web::Method::GET ? "selected" : "");
+			sentinel::string::replace(content, "%POST_SELECTED%", configuration->method == sentinel::web::Method::POST ? "selected" : "");
+			sentinel::string::replace(content, "%DELETE_SELECTED%", configuration->method == sentinel::web::Method::DELETE ? "selected" : "");
+			sentinel::string::replace(content, "%PUT_SELECTED%", configuration->method == sentinel::web::Method::PUT ? "selected" : "");
+			sentinel::string::replace(content, "%HEADERS%", configuration->headers);
+			sentinel::string::replace(content, "%BODY%", configuration->body);
 			sender->send(200, "text/html", content);
 		}
 		bool SetupHandler::handlePost() {
@@ -66,8 +59,6 @@ namespace wifi_button {
 				configuration->method = sentinel::web::Method::DELETE;
 			else if (argProvider->arg("method") == "put")
 				configuration->method = sentinel::web::Method::PUT;
-			else if (argProvider->arg("method") == "head")
-				configuration->method = sentinel::web::Method::HEAD;
 			else
 				return false;
 

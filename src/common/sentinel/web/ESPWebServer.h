@@ -1,5 +1,4 @@
-#ifndef ESPWEBSERVER_H
-#define ESPWEBSERVER_H
+#pragma once
 
 #include <ESP8266WebServer.h>
 #include <map>
@@ -53,4 +52,3 @@ namespace sentinel {
 		};
     }
 }
-#endif

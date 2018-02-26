@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <Arduino.h>
+#include <ESP8266HTTPClient.h>
 #include "common/sentinel/web/ESPWebServer.h"
 #include "common/sentinel/logger/logger.h"
 #include "common/sentinel/ota/ota.h"
@@ -17,18 +18,15 @@
 #include "handler/healthcheck/HealthcheckHandler.h"
 #include "handler/setup/SetupHandler.h"
 #include "handler/test/TestHandler.h"
+#include "handler/button/ButtonHandler.h"
 #include "conf/Configuration.h"
+
 
 sentinel::ota::OverTheAirUploadReceiver* otaReceiver = nullptr;
 sentinel::log::Logger* logger;
 sentinel::web::IWebServer* web;
 std::shared_ptr<wifi_button::configuration::Configuration> configuration;
 sentinel::peripheral::Button* button;
-
-void onButtonDown() {
-	logger->info("Button is pressed");
-	delay(1000);
-}
 
 void initLogger() {
 	Serial.begin(112500);
@@ -89,7 +87,9 @@ void setup() {
     initLogger();
 	initWiFi();
     initWebServer();
-	button = new sentinel::peripheral::Button(D0, onButtonDown);
+	wifi_button::handler::ButtonHandler* handler = new wifi_button::handler::ButtonHandler(*configuration, *logger);
+	button = new sentinel::peripheral::Button(D0, 
+		std::bind(&wifi_button::handler::ButtonHandler::handle, handler), 1000);
 }
 
 void loop() {    

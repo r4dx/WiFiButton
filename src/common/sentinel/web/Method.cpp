@@ -18,7 +18,7 @@ namespace sentinel {
             }
         }
 
-        Method httpMethodToMethod(HTTPMethod method) {    
+        Method httpMethodToMethod(HTTPMethod method) {
             switch (method) {
                 case HTTPMethod::HTTP_GET:
                     return Method::GET;
@@ -26,9 +26,26 @@ namespace sentinel {
                     return Method::POST;
                 case HTTPMethod::HTTP_DELETE:
                     return Method::DELETE;
+				case HTTPMethod::HTTP_PUT:
+					return Method::PUT;
                 default:
                     assert(0 && "Undefined HTTPMethod");
             }
         }
+
+		std::string methodToString(Method method) {
+			switch (method) {
+			case Method::GET:
+				return "GET";
+			case Method::POST:
+				return "POST";
+			case Method::DELETE:
+				return "DELETE";
+			case Method::PUT:
+				return "PUT";
+			default:
+				assert(0 && "Undefined Method");
+			}
+		}
     }
 }

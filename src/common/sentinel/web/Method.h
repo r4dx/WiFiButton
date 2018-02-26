@@ -1,7 +1,6 @@
-#ifndef METHOD_H
-#define METHOD_H
-
+#pragma once
 #include "ESP8266WebServer.h"
+#include <string>
 
 namespace sentinel {
     namespace web {
@@ -9,14 +8,11 @@ namespace sentinel {
             GET,
             POST,
             DELETE,
-			PUT,
-			HEAD
+			PUT
         };
         
         HTTPMethod methodToHTTPMethod(Method method);
-        Method httpMethodToMethod(HTTPMethod method);           
-        
+		Method httpMethodToMethod(HTTPMethod method);
+		std::string methodToString(Method method);
     }
 }
-
-#endif
