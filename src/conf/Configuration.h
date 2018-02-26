@@ -23,6 +23,7 @@ namespace wifi_button {
 			sentinel::web::Method method;
 			std::string headers;
 			std::string body;
+			std::string sha1Fingerprint;
 
 			SaveResponse save();
 			static std::shared_ptr<Configuration> load(sentinel::storage::IStorage& storage);

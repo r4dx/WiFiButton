@@ -9,7 +9,7 @@ namespace wifi_button {
 				return SaveResponse::PASSWORD_TOO_LONG;
 			if (url.size() > 2083)
 				return SaveResponse::URL_TOO_LONG;
-			if (headers.size() + body.size() + url.size() + password.size() + ssid.size() + 5 >= 8000)
+			if (headers.size() + body.size() + url.size() + password.size() + ssid.size() + sha1Fingerprint.size() + 5 >= 8000)
 				return SaveResponse::OVERALL_SIZE_TOO_BIG;
 
 			storage.write_uint32(magic);
@@ -19,6 +19,7 @@ namespace wifi_button {
 			storage.write_uint8((uint8_t)method);
 			storage.write_string(headers);
 			storage.write_string(body);
+			storage.write_string(sha1Fingerprint);
 			return SaveResponse::OK;
 
 		}
@@ -35,6 +36,7 @@ namespace wifi_button {
 			result->method = (sentinel::web::Method)storage.read_uint8();
 			result->headers = storage.read_string();
 			result->body = storage.read_string();
+			result->sha1Fingerprint = storage.read_string();
 
 			return result;
 		}

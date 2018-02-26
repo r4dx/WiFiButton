@@ -29,8 +29,13 @@ namespace wifi_button {
 		void ButtonHandler::handle() {
 			logger.info("Button is pressed");
 			HTTPClient client;
-			if (!client.begin(configuration.url.c_str())) {
-				logger.error("Can't open URL: " + configuration.url);
+			bool connected = configuration.sha1Fingerprint == "" ?
+				client.begin(configuration.url.c_str()) :
+				client.begin(configuration.url.c_str(), configuration.sha1Fingerprint.c_str());
+
+			if (!connected) {
+				logger.error("Can't open URL: '%s', sha1Fingerprint = '%s'", 
+					configuration.url.c_str(), configuration.sha1Fingerprint.c_str());
 				return;
 			}
 			addHeaders(client);
